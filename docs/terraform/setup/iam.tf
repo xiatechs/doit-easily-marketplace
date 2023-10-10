@@ -1,26 +1,30 @@
 #give google access to this project
 resource "google_project_iam_member" "cloud-commerce-marketplace-onboarding_editor" {
-  project = google_project.isv-public.id
+  project = var.project_id
+  # project = google_project.isv-public.id
   member  = "group:cloud-commerce-marketplace-onboarding@twosync-src.google.com"
   role    = "roles/editor"
 }
 
 #give google access to this project
 resource "google_project_iam_member" "cloud-commerce-marketplace_admin" {
-  project = google_project.isv-public.id
+  project = var.project_id
+  # project = google_project.isv-public.id
   member  = "group:cloud-commerce-marketplace-onboarding@twosync-src.google.com"
   role    = "roles/servicemanagement.admin"
 }
 
 #give google access to this project
 resource "google_project_iam_member" "cloud-commerce-procurement_admin" {
-  project = google_project.isv-public.id
+  project = var.project_id
+  # project = google_project.isv-public.id
   member  = "serviceAccount:cloud-commerce-procurement@system.gserviceaccount.com"
   role    = "roles/servicemanagement.admin"
 }
 
 resource "google_project_iam_member" "cloud-commerce-servicemanagement_configeditor" {
-  project = google_project.isv-public.id
+  project = var.project_id
+  # project = google_project.isv-public.id
   member  = "serviceAccount:cloud-commerce-procurement@system.gserviceaccount.com"
   role    = "roles/servicemanagement.configEditor"
 }
