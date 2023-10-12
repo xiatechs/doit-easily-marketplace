@@ -1,9 +1,6 @@
 provider "google-beta" {
   project = var.project_id
 }
-provider "google" {
-  project = var.project_id
-}
 
 
 #get an access token for the doit-easily SA
