@@ -37,7 +37,7 @@ jobs:
           keys:
             - gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run:
-          name: plan
+          name: Terragrunt Plan
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
             set -a; source .env; set +a
@@ -53,7 +53,7 @@ jobs:
           keys:
             - gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run:
-          name: apply
+          name: Terragrunt Apply
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
             set -a; source .env; set +a
@@ -71,7 +71,7 @@ jobs:
           keys:
             - gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run:
-          name: destroy
+          name: Terragrun Destroy
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
             set -a; source .env; set +a
