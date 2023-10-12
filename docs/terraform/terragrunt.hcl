@@ -29,7 +29,7 @@ remote_state {
   config = {
     project  = "xiatech-shared-prod"
     bucket   = "xiatech-global-terraform-state"
-    prefix   = "terraform/${local.project_id}/terraform.tfstate"
+    prefix   = "terraform/${local.project_id}/${path_relative_to_include()}/terraform.tfstate"
     location = "europe-west2"
   }
   generate = {

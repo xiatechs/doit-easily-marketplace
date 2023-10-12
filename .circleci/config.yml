@@ -27,7 +27,7 @@ jobs:
             - /tmp/application_default_credentials.json
             - /tmp/oidc.token
 
-  terragrunt-plan:
+  terragrunt-plan-setup:
     circleci_ip_ranges: true
     docker:
       - image: alpine/terragrunt
@@ -37,13 +37,13 @@ jobs:
           keys:
             - gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run:
-          name: Terragrunt Plan
+          name: Terragrunt Plan Setup
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
             set -a; source .env; set +a
             terragrunt run-all plan
 
-  terragrunt-apply:
+  terragrunt-apply-setup:
     circleci_ip_ranges: true
     docker:
       - image: alpine/terragrunt
@@ -53,7 +53,7 @@ jobs:
           keys:
             - gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run:
-          name: Terragrunt Apply
+          name: Terragrunt Apply Setup
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
             set -a; source .env; set +a
@@ -82,14 +82,14 @@ workflows:
   deploy:
     jobs:
       - auth
-      - terragrunt-plan:
+      - terragrunt-plan-setup:
           requires:
             - auth
       - hold:
           type: approval
-          name: terragrunt-apply-approval
+          name: terragrunt-apply-setup-approval
           requires:
-            - terragrunt-plan
-      - terragrunt-apply:
+            - terragrunt-plan-setup
+      - terragrunt-apply-setup:
           requires:
-           - terragrunt-apply-approval
+           - terragrunt-apply-setup-approval
