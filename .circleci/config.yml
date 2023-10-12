@@ -62,6 +62,41 @@ jobs:
               --terragrunt-working-dir docs/terraform/setup \
               --terragrunt-non-interactive
 
+  terragrunt-plan-app_deploy:
+    circleci_ip_ranges: true
+    docker:
+      - image: alpine/terragrunt
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      - run:
+          name: Terragrunt Plan App_Deploy
+          command: |
+            export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
+            set -a; source .env; set +a
+            terragrunt run-all plan \
+              --terragrunt-working-dir docs/terraform/app_deploy
+
+  terragrunt-apply-app_deploy:
+    circleci_ip_ranges: true
+    docker:
+      - image: alpine/terragrunt
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      - run:
+          name: Terragrunt Apply App_Deploy
+          command: |
+            export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
+            set -a; source .env; set +a
+            terragrunt run-all apply \
+              --terragrunt-working-dir docs/terraform/app_deploy \
+              --terragrunt-non-interactive
+
   terragrunt-destroy:
     circleci_ip_ranges: true
     docker:
@@ -95,3 +130,14 @@ workflows:
       - terragrunt-apply-setup:
           requires:
            - terragrunt-apply-setup-approval
+      - terragrunt-plan-app_deploy:
+          requires:
+            - terragrunt-apply-setup
+      - hold:
+          type: approval
+          name: terragrunt-apply-app_deploy-approval
+          requires:
+            - terragrunt-plan-app_deploy
+      - terragrunt-apply-app_deploy:
+          requires:
+           - terragrunt-apply-app_deploy-approval
