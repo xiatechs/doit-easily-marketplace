@@ -81,9 +81,7 @@ jobs:
 workflows:
   deploy:
     jobs:
-      - auth:
-          region: europe-west2
-          environment: dev
+      - auth
       - terragrunt-plan:
           requires:
             - auth
