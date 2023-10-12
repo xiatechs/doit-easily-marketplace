@@ -41,7 +41,8 @@ jobs:
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
             set -a; source .env; set +a
-            terragrunt run-all plan
+            terragrunt run-all plan \
+              --terragrunt-working-dir docs/terraform/setup
 
   terragrunt-apply-setup:
     circleci_ip_ranges: true
@@ -58,6 +59,7 @@ jobs:
             export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
             set -a; source .env; set +a
             terragrunt run-all apply \
+              --terragrunt-working-dir docs/terraform/setup \
               --terragrunt-non-interactive
 
   terragrunt-destroy:
