@@ -3,7 +3,7 @@ locals {
   project_id = get_env("GCP_PROJECT_ID")
 }
 
-intupts = {
+inputs = {
   region      = local.region
   project_id  = local.project_id
 }
