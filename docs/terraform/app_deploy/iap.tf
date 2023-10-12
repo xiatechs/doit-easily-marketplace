@@ -9,7 +9,7 @@ resource "google_iap_brand" "iap_brand" {
   # The user/service account running the terraform has to have ownership over the email account in Google Groups.
   # To workaround this, if it's intended only for internal use, one may decide to use the email attached to that service account.
   support_email     = var.brand_support_email
-  project           = var.project_number
+  project           = var.project_id
 }
 
 resource "google_iap_client" "iap_client" {
