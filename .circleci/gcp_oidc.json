@@ -1,0 +1,13 @@
+{
+  "type": "external_account",
+  "audience": "//iam.googleapis.com/projects/1074515449991/locations/global/workloadIdentityPools/circleci/providers/circleci",
+  "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",
+  "token_url": "https://sts.googleapis.com/v1/token",
+  "service_account_impersonation_url": "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/circleci-deployment@xiatech-shared-prod.iam.gserviceaccount.com:generateAccessToken",
+  "credential_source": {
+    "file": "/tmp/oidc.token",
+    "format": {
+      "type": "text"
+    }
+  }
+}

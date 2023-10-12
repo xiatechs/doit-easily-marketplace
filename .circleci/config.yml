@@ -1,0 +1,97 @@
+version: 2.1
+
+parameters:
+  layer:
+    type: string
+    default: "placeholder"
+
+jobs:
+
+  auth:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: 
+          name: Source env and authenticate
+          command: |
+            set -a; source .env; set +a
+            echo $CIRCLE_OIDC_TOKEN > /tmp/oidc.token
+            gcloud auth login --cred-file .circleci/gcp_oidc.json --update-adc --project $GCP_PROJECT_ID
+            mv $HOME/.config/gcloud/application_default_credentials.json /tmp/application_default_credentials.json
+      - save_cache:
+          key: gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+          paths:
+            - /tmp/application_default_credentials.json
+            - /tmp/oidc.token
+
+  terragrunt-plan:
+    circleci_ip_ranges: true
+    docker:
+      - image: alpine/terragrunt
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      - run:
+          name: plan
+          command: |
+            export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
+            set -a; source .env; set +a
+            terragrunt run-all plan
+
+  terragrunt-apply:
+    circleci_ip_ranges: true
+    docker:
+      - image: alpine/terragrunt
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      - run:
+          name: apply
+          command: |
+            export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
+            set -a; source .env; set +a
+            terragrunt run-all apply \
+              --terragrunt-non-interactive
+
+  terragrunt-destroy:
+    circleci_ip_ranges: true
+    docker:
+      - image: alpine/terragrunt
+    parameters:
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gcp-auth-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      - run:
+          name: destroy
+          command: |
+            export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
+            set -a; source .env; set +a
+            terragrunt run-all destroy \
+              --terragrunt-non-interactive
+
+workflows:
+  deploy:
+    jobs:
+      - auth:
+          region: europe-west2
+          environment: dev
+      - terragrunt-plan:
+          requires:
+            - auth
+      - hold:
+          type: approval
+          name: terragrunt-apply-approval
+          requires:
+            - terragrunt-plan
+      - terragrunt-apply:
+          requires:
+           - terragrunt-apply-approval

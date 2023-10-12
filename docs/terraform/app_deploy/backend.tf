@@ -1,6 +1,6 @@
-terraform {
-  backend "gcs" {
-    bucket = "doit-test-davec-public-terraform"
+# terraform {
+#   backend "gcs" {
+#     bucket = "doit-test-davec-public-terraform"
     
-  }
-}
+#   }
+# }
