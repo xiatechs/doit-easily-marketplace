@@ -10,20 +10,19 @@ inputs = {
   cloudrun_location = "europe-west2"
   is_codelab = false
   log_level = "info"
-  audience = "marketplace-api.xiatech.io"
+  audience = "google-marketplace.xiatech.io"
   ssl = true
-  domain = "marketplace-api.xiatech.io"
+  domain = "google-marketplace.xiatech.io"
   lb_name = "xiatechpartner-load-balancer"
   enable_logging = false
   log_sample_rate = 0
   brand_name = "Xiatech - Marketplace"
-  project_number = 12345
-  brand_support_email = "circleci-deployment@xiatech-shared-prod.iam.gserviceaccount.com"
+  project_number = 520245502579
+  brand_support_email = "marketplace-admin@xiatech.co.uk"
   iap_client_display_name = "Xiatech - Marketplace"
   managed_zone_name = "xiatech-io"
   managed_zone_project = "xiatech-shared-prod"
   external_ip_name = "xiatechpartner-public-ip"
-  topic_name = "xiatechpartner-public"
 }
 
 include {
