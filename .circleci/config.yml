@@ -93,6 +93,7 @@ jobs:
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
             set -a; source .env; set +a
+            terraform import module.api-lb.google_compute_managed_ssl_certificate.default[0] projects/xiatechpartner/global/sslCertificates/api-lb-cert
             terragrunt run-all apply \
               --terragrunt-working-dir docs/terraform/app_deploy \
               --terragrunt-non-interactive
