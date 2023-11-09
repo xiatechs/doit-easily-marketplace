@@ -135,9 +135,10 @@ workflows:
            - terragrunt-apply-setup-approval
   app_deploy:
     jobs:
+      - auth
       - terragrunt-plan-app_deploy:
           requires:
-            - terragrunt-apply-setup
+            - auth
       - hold:
           type: approval
           name: terragrunt-apply-app_deploy-approval
