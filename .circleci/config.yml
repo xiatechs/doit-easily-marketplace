@@ -119,7 +119,7 @@ jobs:
               --terragrunt-non-interactive
 
 workflows:
-  deploy:
+  setup:
     jobs:
       - auth
       - terragrunt-plan-setup:
@@ -133,6 +133,8 @@ workflows:
       - terragrunt-apply-setup:
           requires:
            - terragrunt-apply-setup-approval
+  app_deploy:
+    jobs:
       - terragrunt-plan-app_deploy:
           requires:
             - terragrunt-apply-setup
