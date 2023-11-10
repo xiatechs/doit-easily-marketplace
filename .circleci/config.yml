@@ -76,6 +76,9 @@ jobs:
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
             set -a; source .env; set +a
+            # terragrunt import google_iap_brand.iap_brand projects/xiatechpartner/brands/520245502579 \
+            #   --terragrunt-working-dir docs/terraform/app_deploy \
+            #   --terragrunt-non-interactive
             terragrunt run-all plan \
               --terragrunt-working-dir docs/terraform/app_deploy
 
@@ -93,9 +96,6 @@ jobs:
           command: |
             export GOOGLE_APPLICATION_CREDENTIALS=/tmp/application_default_credentials.json
             set -a; source .env; set +a
-            terragrunt import google_iap_brand.iap_brand projects/xiatechpartner/brands/520245502579 \
-              --terragrunt-working-dir docs/terraform/app_deploy \
-              --terragrunt-non-interactive
             terragrunt run-all apply \
               --terragrunt-working-dir docs/terraform/app_deploy \
               --terragrunt-non-interactive
