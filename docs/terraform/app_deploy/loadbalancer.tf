@@ -35,67 +35,67 @@ resource "google_compute_url_map" "url_map" {
   }
 }
 
-module "api-lb" {
-  source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
-  version = "~> 6.3"
-  name    = "api-lb"
-  project = var.project_id
+# module "api-lb" {
+#   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
+#   version = "~> 6.3"
+#   name    = "api-lb"
+#   project = var.project_id
 
-  ssl                             = true
-  managed_ssl_certificate_domains = [var.domain]
-  https_redirect                  = true
-#  labels                          = { "example-label" = "cloud-run-example" }
-  url_map                         = google_compute_url_map.url_map.self_link
-  create_url_map = false
-  address                         = google_compute_global_address.external_ip.address
-  create_address                  = false
-  backends = {
-    default = {
-      description = null
-      groups = [
-        {
-          group = google_compute_region_network_endpoint_group.api_lb_neg.id
-        }
-      ]
-      enable_cdn              = false
-      security_policy         = null
-      custom_request_headers  = null
-      custom_response_headers = null
+#   ssl                             = true
+#   managed_ssl_certificate_domains = [var.domain]
+#   https_redirect                  = true
+# #  labels                          = { "example-label" = "cloud-run-example" }
+#   url_map                         = google_compute_url_map.url_map.self_link
+#   create_url_map = false
+#   address                         = google_compute_global_address.external_ip.address
+#   create_address                  = false
+#   backends = {
+#     default = {
+#       description = null
+#       groups = [
+#         {
+#           group = google_compute_region_network_endpoint_group.api_lb_neg.id
+#         }
+#       ]
+#       enable_cdn              = false
+#       security_policy         = null
+#       custom_request_headers  = null
+#       custom_response_headers = null
 
-      iap_config = {
-        enable               = true
-        oauth2_client_id     = google_iap_client.iap_client.client_id
-        oauth2_client_secret = google_iap_client.iap_client.secret
-      }
-      log_config = {
-        enable      = true
-        sample_rate = 1
-      }
-    }
+#       iap_config = {
+#         enable               = true
+#         oauth2_client_id     = google_iap_client.iap_client.client_id
+#         oauth2_client_secret = google_iap_client.iap_client.secret
+#       }
+#       log_config = {
+#         enable      = true
+#         sample_rate = 1
+#       }
+#     }
 
-    frontend = {
-      description = "public endpoint for frontend integration"
-      groups      = [
-        {
-          group = google_compute_region_network_endpoint_group.api_lb_neg.id
-        }
-      ]
-      enable_cdn              = false
-      security_policy         = null
-      custom_request_headers  = null
-      custom_response_headers = null
-      iap_config              = {
-        enable               = false
-        oauth2_client_id     = ""
-        oauth2_client_secret = ""
-      }
-      log_config = {
-        enable      = true
-        sample_rate = 1
-      }
-    }
-  }
-}
+#     frontend = {
+#       description = "public endpoint for frontend integration"
+#       groups      = [
+#         {
+#           group = google_compute_region_network_endpoint_group.api_lb_neg.id
+#         }
+#       ]
+#       enable_cdn              = false
+#       security_policy         = null
+#       custom_request_headers  = null
+#       custom_response_headers = null
+#       iap_config              = {
+#         enable               = false
+#         oauth2_client_id     = ""
+#         oauth2_client_secret = ""
+#       }
+#       log_config = {
+#         enable      = true
+#         sample_rate = 1
+#       }
+#     }
+#   }
+# }
 
 resource "google_compute_region_network_endpoint_group" "api_lb_neg" {
   provider              = google-beta
