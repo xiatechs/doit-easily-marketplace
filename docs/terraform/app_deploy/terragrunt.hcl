@@ -6,7 +6,7 @@ locals {
 inputs = {
   project_id  = local.project_id
   doit_easily_image = "europe-west2-docker.pkg.dev/xiatech-shared-prod/xiatech-images/doit-easily:1.0.1"
-  secret_version = "1"
+  secret_version = "2"
   cloudrun_location = "europe-west2"
   is_codelab = false
   log_level = "info"
